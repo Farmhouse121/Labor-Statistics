@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>MYSQLPASSWORD</key>
+		<string>password</string>
+		<key>PATH</key>
+		<string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/texlive/2016/bin/x86_64-darwin:/usr/local/mysql/bin:/Library/TeX/texbin:/usr/local/share/dotnet:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Applications/Xamarin Workbooks.app/Contents/SharedSupport/path-bin:/usr/local/sbin</string>
+	</dict>
+	<key>Label</key>
+	<string>Labstat</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/Users/username/Documents/Xcode/Labor Statistics/src/labstat.sh</string>
+	</array>
+	<key>RunAtLoad</key>
+	<false/>
+	<key>StandardErrorPath</key>
+	<string>/tmp/labstat.log</string>
+	<key>StandardOutPath</key>
+	<string>/tmp/labstat.log</string>
+	<key>StartCalendarInterval</key>
+	<array>
+		<dict>
+			<key>Hour</key>
+			<integer>13</integer>
+			<key>Minute</key>
+			<integer>29</integer>
+		</dict>
+	</array>
+	<key>Umask</key>
+	<integer>54</integer>
+</dict>
+</plist>
