@@ -31,6 +31,7 @@ def main():
     args.add_argument("-k","--keep",action='store_false',help="Set to keep temporary files (usually for debugging).")
     args.add_argument("-i","--items",type=str,default="%s.item",help="Name of data file for item metadata.")
     args.add_argument("-w","--warnings",action='store_true',help="Set to catch database warnings.")
+    args.add_argument("-L","--local",action='store_true',help="Set to use LOAD DATA LOCAL INFILE rather than just LOAD DATA INFILE.")
     args=args.parse_args();
     
     if "%s" in args.url:
@@ -209,7 +210,7 @@ CREATE TABLE IF NOT EXISTS BLSTimeSeriesHistory
                 
                 if args.section=='ap':
                     sql="""/* LOAD BLSItems DATA */
-LOAD DATA INFILE
+LOAD DATA %s INFILE
     '%s'
 REPLACE INTO TABLE
     BLSItems
@@ -224,6 +225,7 @@ SET
     item_code=TRIM(@item_code),
     item_name=TRIM(@item_name),
     section='%s'""" % (
+                            'LOCAL' if args.local else '',
                             tempfile.name,
                             args.column,
                             args.newline,
@@ -233,7 +235,7 @@ SET
     
                 elif args.section in ['cu','su']:
                     sql="""/* LOAD BLSItems DATA */
-LOAD DATA INFILE
+LOAD DATA %s INFILE
     '%s'
 REPLACE INTO TABLE
     BLSItems
@@ -254,6 +256,7 @@ SET
     selectable=CASE @selectable WHEN 'T' THEN 1 WHEN 'F' THEN 0 END,
     sort_sequence=CASE WHEN LENGTH(TRIM(@sort_sequence))>0 THEN @sort_sequence+0 END,
     section='%s'""" % (
+                            'LOCAL' if args.local else '',
                             tempfile.name,
                             args.column,
                             args.newline,
@@ -287,7 +290,7 @@ SET
                 
                 if args.section=='ap':
                     sql="""/* LOAD BLSSeries DATA */
-LOAD DATA INFILE
+LOAD DATA %s INFILE
     '%s'
 REPLACE INTO TABLE
     BLSSeries
@@ -329,6 +332,7 @@ SET
                 WHEN begin_year>0 AND begin_period IN ('M13','S03') THEN STR_TO_DATE(CONCAT(begin_year,'1231'),'%%Y%%m%%d') 
               END,
     seasonal=CASE WHEN series_title LIKE '%%not seasonally adjusted%%' THEN 'U' ELSE 'S' END""" % (
+                            'LOCAL' if args.local else '',
                             tempfile.name,
                             args.column,
                             args.newline,
@@ -338,7 +342,7 @@ SET
                         
                 elif args.section in ['cu','su']:
                     sql="""/* LOAD BLSSeries DATA */
-LOAD DATA INFILE
+LOAD DATA %s INFILE
     '%s'
 REPLACE INTO TABLE
     BLSSeries
@@ -386,7 +390,8 @@ SET
                 WHEN end_year>0 AND end_period='S01' THEN STR_TO_DATE(CONCAT(begin_year,'0630'),'%%Y%%m%%d') 
                 WHEN end_year>0 AND end_period='S02' THEN STR_TO_DATE(CONCAT(begin_year,'1231'),'%%Y%%m%%d') 
                 WHEN begin_year>0 AND begin_period IN ('M13','S03') THEN STR_TO_DATE(CONCAT(begin_year,'1231'),'%%Y%%m%%d') 
-              END""" % (                            
+              END""" % (
+                            'LOCAL' if args.local else '',
                             tempfile.name,
                             args.column,
                             args.newline,
@@ -416,7 +421,7 @@ SET
                 chmod(tempfile.name,0o644) # change file permissions  
                 
                 sql="""/* LOAD BLSTimeSeries DATA */
-LOAD DATA INFILE
+LOAD DATA %s INFILE
     '%s'
 REPLACE INTO TABLE
     BLSTimeSeries
@@ -441,6 +446,7 @@ SET
              WHEN year>0 AND period='S01' THEN STR_TO_DATE(CONCAT(year,'0630'),'%%Y%%m%%d')
              WHEN year>0 AND period IN ('M13','S02','S03') THEN STR_TO_DATE(CONCAT(year,'1231'),'%%Y%%m%%d')
          END""" % (
+                    'LOCAL' if args.local else '',
                     tempfile.name,
                     args.column,
                     args.newline,
@@ -456,7 +462,7 @@ SET
                     print(sql)
                 
                 sql="""/* LOAD BLSTimeSeriesHistory DATA */
-LOAD DATA INFILE
+LOAD DATA %s INFILE
     '%s'
 IGNORE INTO TABLE
     BLSTimeSeriesHistory
@@ -482,6 +488,7 @@ SET
              WHEN year>0 AND period IN ('M13','S02','S03') THEN STR_TO_DATE(CONCAT(year,'1231'),'%%Y%%m%%d')
          END,
     seq=seq+1""" % (
+                    'LOCAL' if args.local else '',
                     tempfile.name,
                     args.column,
                     args.newline,
