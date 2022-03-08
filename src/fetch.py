@@ -439,7 +439,7 @@ SET
     series_id=TRIM(@series_id),
     year=CASE WHEN LENGTH(TRIM(@year))>0 THEN @year+0 END,
     period=CASE WHEN LENGTH(TRIM(@period))>0 THEN @period END,
-    value=CASE WHEN LENGTH(TRIM(@value))>0 THEN @value+0e0 END,
+    value=CASE WHEN LENGTH(TRIM(@value))>0 AND TRIM(@value)<>'-' THEN @value+0e0 END,
     footnote_codes=CASE WHEN LENGTH(TRIM(@footnote_codes))>0 THEN TRIM(@footnote_codes) END,
     date=CASE 
              WHEN year>0 AND period LIKE 'M%%' AND period<>'M13' THEN LAST_DAY(STR_TO_DATE(CONCAT(year,period,'01'),'%%YM%%m%%d')) 
@@ -480,7 +480,7 @@ SET
     series_id=TRIM(@series_id),
     year=CASE WHEN LENGTH(TRIM(@year))>0 THEN @year+0 END,
     period=CASE WHEN LENGTH(TRIM(@period))>0 THEN @period END,
-    value=CASE WHEN LENGTH(TRIM(@value))>0 THEN @value END,
+    value=CASE WHEN LENGTH(TRIM(@value))>0 AND TRIM(@value)<>'-' THEN @value+0e0 END,
     footnote_codes=CASE WHEN LENGTH(TRIM(@footnote_codes))>0 THEN TRIM(@footnote_codes) END,
     date=CASE 
              WHEN year>0 AND period LIKE 'M%%' AND period<>'M13' THEN LAST_DAY(STR_TO_DATE(CONCAT(year,period,'01'),'%%YM%%m%%d')) 
