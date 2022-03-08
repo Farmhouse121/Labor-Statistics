@@ -21,7 +21,7 @@ def main():
     args.add_argument("-T","--truncate",action='store_true',help="Drop tables.")
     args.add_argument("-U","--update",action='store_true',help="Set to update database.")
     args.add_argument("-H","--hidden",action='store_true',help="Prevent arguments and secrets being echoed to the terminal.")    
-    args.add_argument("section",type=str,help="Section of LABSTAT to extract.")
+    args.add_argument("section",type=str,choices=['ap','cu','su'],help="Section of LABSTAT to extract.")
     args.add_argument("-u","--url",type=str,default='https://download.bls.gov/pub/time.series/%s',help="URL for data folder.")
     args.add_argument("-n","--newline",type=str,default=r'\r\n',help="Line break code for data files.")
     args.add_argument("-c","--column",type=str,default=r'\t',help="Column break code for data files.")
