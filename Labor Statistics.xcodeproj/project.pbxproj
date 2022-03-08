@@ -13,14 +13,12 @@
 		8C51771027D11E55005C4D1D /* Load BTS OADS Data.mysql.sql */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Load BTS OADS Data.mysql.sql"; sourceTree = "<group>"; };
 		8C51771127D11E55005C4D1D /* loadbts.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = loadbts.sh; sourceTree = "<group>"; };
 		8C51771227D11E78005C4D1D /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		8C51771327D79C54005C4D1D /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		8C3C329027C034230032756A = {
 			isa = PBXGroup;
 			children = (
-				8C51771327D79C54005C4D1D /* README.md */,
 				8C51770F27D11E45005C4D1D /* bts */,
 				8C51770E27D103A7005C4D1D /* sql */,
 				8C51770A27D01E20005C4D1D /* README.md */,

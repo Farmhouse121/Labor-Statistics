@@ -4,9 +4,10 @@ The `--database` switch on input uses an "ODBC like" connection string, it may c
 
     database=database_name;server=server_name;uid=user_name;pwd=password;port=tcp_port
     
-in any order, or optionally omitting some. If the code fails to find `UID` it will try the environment variable `USER`;
-if it fails to find `PWD` it will try the environment variable `MYSQLPASSWORD`, and if that fails it will try to read
-the password from the command line via the Python `getpass` system (which doesn't echo text).
+in any order, or optionally omitting some. If the code fails to find `uid` it will try the environment variable `USER`;
+if it fails to find `pwd` it will try the environment variable `MYSQLPASSWORD`, and if that fails it will try to read
+the password from the command line via the Python `getpass` system (which doesn't echo text); if it fails to find `server`
+it will use `localhost`; if it fails to find `port`, the port is assumed to be the default MySQL port `3306`.
 
 The code uses `NamedTemporaryFile` to create downloaded text files for bulk insert into the database via `LOAD DATA INFILE`.
 For `LOAD DATA INFILE` to work the server must have `secure_file_priv = "/tmp"` set in the `my.cnf` file, which can be edited
