@@ -3,7 +3,7 @@
 """Script to image a section of the BLS's LABSTAT database."""
 
 # modules
-from pymysql import connect,DatabaseError,Warning
+from pymysql import connect,DatabaseError,Warning,OperationalError
 from pymysql.cursors import DictCursor
 from sys import stderr,stdout,version_info
 from os import getenv,chmod,unlink
@@ -201,7 +201,7 @@ CREATE TABLE IF NOT EXISTS BLSTimeSeriesHistory
             response=get(url)
             
             if response.status_code/100!=2:
-                raise Exception("Status code %d returned for URL %s" % (response.status_code,url))
+                raise ValueError("Status code %d returned for URL %s" % (response.status_code,url))
 
             with NamedTemporaryFile(dir='/tmp',delete=args.keep,mode='w+') as tempfile:
                 tempfile.write(response.text)
@@ -265,7 +265,7 @@ SET
                     )                    
         
                 else:
-                    raise Exception("Don't know how to load data for BLS LABSTAT section '%s'." % args.section)
+                    raise ValueError("Don't know how to load data for BLS LABSTAT section '%s'." % args.section)
 
                 print("Bulk load of items metadata into database for LABSTAT section '%s'." % args.section)
                 
@@ -281,7 +281,7 @@ SET
             response=get(url)
             
             if response.status_code/100!=2:
-                raise Exception("Status code %d returned for URL %s" % (response.status_code,url))
+                raise ValueError("Status code %d returned for URL %s" % (response.status_code,url))
 
             with NamedTemporaryFile(dir='/tmp',delete=args.keep,mode='w+') as tempfile:
                 tempfile.write(response.text)
@@ -413,7 +413,7 @@ SET
             response=get(url)
             
             if response.status_code/100!=2:
-                raise Exception("Status code %d returned for URL %s" % (response.status_code,url))
+                raise ValueError("Status code %d returned for URL %s" % (response.status_code,url))
 
             with NamedTemporaryFile(dir='/tmp',delete=args.keep,mode='w+') as tempfile:
                 tempfile.write(response.text)
@@ -512,10 +512,10 @@ SET
                 else:
                     print(sql)
                 
-    except DatabaseError:
+    except (DatabaseError,OperationalError) as e:
         if 'sql' in locals():
             stdout.flush()
-            stderr.write("Problem with SQL:\n%s\n" % sql)
+            stderr.write("Problem with SQL:\n%s\n%s\n" % (sql,str(e)))
             
         raise
 

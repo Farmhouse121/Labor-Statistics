@@ -2,7 +2,7 @@
 #encoding: UTF-8
 """Script to download BLS Relative Importance Weights for CPI."""
 # modules
-from pymysql import connect,DatabaseError,Warning
+from pymysql import connect,DatabaseError,Warning,OperationalError
 from pymysql.cursors import DictCursor
 from sys import stderr,stdout,version_info
 from os import getenv,chmod
@@ -106,7 +106,7 @@ def main():
                 response=get(args.url)
 
                 if response.status_code/100!=2:
-                    raise Exception("Status code %d returned for URL %s" % (response.status_code,args.url))
+                    raise ValueError("Status code %d returned for URL %s" % (response.status_code,args.url))
 
                 print("Writing data to %s" % filename)
 
@@ -131,7 +131,7 @@ def main():
                         dt=datetime.strptime("%s %s 01" % m.group(1,2),"%b %Y %d")
                     
                     else:
-                        raise Exception("Cannot identify reference period in label string '%s' in Cell(%d,%d)." % (s,args.label,args.weight))
+                        raise ValueError("Cannot identify reference period in label string '%s' in Cell(%d,%d)." % (s,args.label,args.weight))
                 
                     print("Reference period:",dt.strftime("%YM%m"))
                     
@@ -286,10 +286,10 @@ def main():
                             (' '*int(data['indent_level']))+item
                         ))
  
-    except DatabaseError:
+    except (DatabaseError,OperationalError) as e:
         if 'sql' in locals():
             stdout.flush()
-            stderr.write("Problem with SQL:\n%s\n" % sql)
+            stderr.write("Problem with SQL:\n%s\n%s\n" % (sql,str(e)))
         raise
     
     except KeyboardInterrupt:
