@@ -74,7 +74,8 @@ def main():
         user=database['uid'] if 'uid' in database else getenv('USER'),
         password=database['pwd'],
         cursorclass=DictCursor,
-        autocommit=True
+        autocommit=True,
+        local_infile=True,
     )
 
     # main code
